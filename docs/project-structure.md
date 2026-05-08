@@ -6,6 +6,8 @@ src/
   features/
     auth/              # login/register/session
     assistant/         # внутренний интерфейс ассистента
+    i18n/              # UI-компоненты выбора языка
+  i18n/                # инициализация i18next, локали, словари, Intl-хелперы
   lib/                 # общие клиенты и утилиты
   routes/              # TanStack Router file-based routes
   test/                # setup тестовой среды

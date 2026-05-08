@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Eye, EyeOff, Loader2, Mail } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/features/auth/use-auth";
+import { LanguageSelect } from "@/features/i18n/LanguageSelect";
 import { cn } from "@/lib/utils";
 
 type AuthMode = "sign-in" | "sign-up";
 
 export function AuthPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     isConfigured,
     isLoading,
@@ -26,8 +29,8 @@ export function AuthPage() {
   const isSignUp = mode === "sign-up";
 
   const title = useMemo(
-    () => (isSignUp ? "Создать аккаунт" : "Вход"),
-    [isSignUp],
+    () => (isSignUp ? t("auth.signUpTitle") : t("auth.signInTitle")),
+    [isSignUp, t],
   );
 
   useEffect(() => {
@@ -42,14 +45,12 @@ export function AuthPage() {
     setMessage(null);
 
     if (!isConfigured) {
-      setError(
-        "Добавь VITE_SUPABASE_URL и VITE_SUPABASE_ANON_KEY в .env.local.",
-      );
+      setError(t("auth.envMissing"));
       return;
     }
 
     if (password.length < 8) {
-      setError("Пароль должен быть не короче 8 символов.");
+      setError(t("auth.passwordTooShort"));
       return;
     }
 
@@ -65,9 +66,7 @@ export function AuthPage() {
     }
 
     if (isSignUp) {
-      setMessage(
-        "Аккаунт создан. Если включено подтверждение email, проверь почту.",
-      );
+      setMessage(t("auth.signUpSuccess"));
       return;
     }
 
@@ -79,10 +78,17 @@ export function AuthPage() {
       <section className="flex min-h-screen items-center justify-center px-4 py-8">
         <div className="w-full max-w-[420px]">
           <header className="mb-8">
-            <h1 className="text-2xl font-semibold tracking-normal">Seira</h1>
-            <p className="mt-2 text-sm leading-6 text-ice/52">
-              Войдите, чтобы продолжить.
-            </p>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-semibold tracking-normal">
+                  {t("brand")}
+                </h1>
+                <p className="mt-2 text-sm leading-6 text-ice/52">
+                  {t("auth.continueHint")}
+                </p>
+              </div>
+              <LanguageSelect />
+            </div>
           </header>
 
           <section className="rounded-2xl border border-white/10 bg-graphite/72 p-5 shadow-panel sm:p-6">
@@ -99,7 +105,7 @@ export function AuthPage() {
                 }}
                 type="button"
               >
-                Вход
+                {t("auth.signInTab")}
               </button>
               <button
                 className={cn(
@@ -113,7 +119,7 @@ export function AuthPage() {
                 }}
                 type="button"
               >
-                Регистрация
+                {t("auth.signUpTab")}
               </button>
             </div>
 
@@ -121,21 +127,23 @@ export function AuthPage() {
               <h2 className="text-xl font-semibold tracking-normal">{title}</h2>
               <p className="mt-2 text-sm leading-6 text-ice/50">
                 {isSignUp
-                  ? "Минимум данных. Остальное настроим внутри."
-                  : "Используйте email и пароль."}
+                  ? t("auth.signUpDescription")
+                  : t("auth.signInDescription")}
               </p>
             </div>
 
             <form className="grid gap-4" onSubmit={handleSubmit}>
               <label className="grid gap-2">
-                <span className="text-sm font-medium text-ice/72">Email</span>
+                <span className="text-sm font-medium text-ice/72">
+                  {t("auth.email")}
+                </span>
                 <span className="group flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.045] px-3 transition duration-300 focus-within:border-mint/55 focus-within:bg-white/[0.07]">
                   <Mail className="text-ice/42" size={18} aria-hidden="true" />
                   <input
                     autoComplete="email"
                     className="h-12 min-w-0 flex-1 bg-transparent text-base text-ice outline-none placeholder:text-ice/30"
                     onChange={(event) => setEmail(event.target.value)}
-                    placeholder="you@example.com"
+                    placeholder={t("auth.emailPlaceholder")}
                     required
                     type="email"
                     value={email}
@@ -144,7 +152,9 @@ export function AuthPage() {
               </label>
 
               <label className="grid gap-2">
-                <span className="text-sm font-medium text-ice/72">Пароль</span>
+                <span className="text-sm font-medium text-ice/72">
+                  {t("auth.password")}
+                </span>
                 <span className="group flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.045] px-3 transition duration-300 focus-within:border-mint/55 focus-within:bg-white/[0.07]">
                   <input
                     autoComplete={
@@ -153,14 +163,16 @@ export function AuthPage() {
                     className="h-12 min-w-0 flex-1 bg-transparent text-base text-ice outline-none placeholder:text-ice/30"
                     minLength={8}
                     onChange={(event) => setPassword(event.target.value)}
-                    placeholder="Минимум 8 символов"
+                    placeholder={t("auth.passwordPlaceholder")}
                     required
                     type={showPassword ? "text" : "password"}
                     value={password}
                   />
                   <button
                     aria-label={
-                      showPassword ? "Скрыть пароль" : "Показать пароль"
+                      showPassword
+                        ? t("auth.hidePassword")
+                        : t("auth.showPassword")
                     }
                     className="rounded-md p-1.5 text-ice/48 transition duration-300 hover:bg-white/10 hover:text-ice"
                     onClick={() => setShowPassword((value) => !value)}
@@ -196,7 +208,7 @@ export function AuthPage() {
                 ) : (
                   <ArrowRight size={18} aria-hidden="true" />
                 )}
-                {isSignUp ? "Создать аккаунт" : "Войти"}
+                {isSignUp ? t("auth.signUpSubmit") : t("auth.signInSubmit")}
               </button>
             </form>
           </section>

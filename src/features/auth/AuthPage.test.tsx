@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { AuthProvider } from "@/features/auth/AuthProvider";
+import { i18n } from "@/i18n/i18n";
 import { AuthPage } from "./AuthPage";
 
 vi.mock("@tanstack/react-router", async () => {
@@ -14,6 +15,10 @@ vi.mock("@tanstack/react-router", async () => {
 });
 
 describe("AuthPage", () => {
+  beforeEach(async () => {
+    await i18n.changeLanguage("ru");
+  });
+
   it("renders login and registration controls", () => {
     render(
       <AuthProvider>

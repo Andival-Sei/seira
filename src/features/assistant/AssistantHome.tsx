@@ -13,28 +13,31 @@ import {
   Settings,
   Sparkles,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/features/auth/use-auth";
+import { LanguageSelect } from "@/features/i18n/LanguageSelect";
 import { useProfile } from "@/features/profile/use-profile";
-
-const capabilities = [
-  "Память и рабочие пространства",
-  "Инструменты через серверные функции",
-  "История диалогов в Postgres",
-  "RAG и файлы после авторизации",
-];
-
-const navItems = [
-  { label: "Диалог", icon: MessageSquareText, isActive: true },
-  { label: "Память", icon: Brain, isActive: false },
-  { label: "Документы", icon: FileText, isActive: false },
-  { label: "Настройки", icon: Settings, isActive: false },
-];
 
 export function AssistantHome() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { isConfigured, isLoading, session, signOut, user } = useAuth();
   const profileQuery = useProfile(user?.id);
   const profile = profileQuery.data;
+
+  const capabilities = [
+    t("app.modules.memory"),
+    t("app.modules.tools"),
+    t("app.modules.history"),
+    t("app.modules.rag"),
+  ];
+
+  const navItems = [
+    { label: t("app.nav.chat"), icon: MessageSquareText, isActive: true },
+    { label: t("app.nav.memory"), icon: Brain, isActive: false },
+    { label: t("app.nav.documents"), icon: FileText, isActive: false },
+    { label: t("app.nav.settings"), icon: Settings, isActive: false },
+  ];
 
   useEffect(() => {
     if (!isLoading && !session) {
@@ -56,7 +59,7 @@ export function AssistantHome() {
             size={18}
             aria-hidden="true"
           />
-          Проверяем сессию
+          {t("loadingSession")}
         </div>
       </main>
     );
@@ -72,12 +75,12 @@ export function AssistantHome() {
                 <Sparkles size={19} aria-hidden="true" />
               </div>
               <div>
-                <p className="text-base font-semibold">Seira</p>
-                <p className="text-sm text-ice/45">личный ассистент</p>
+                <p className="text-base font-semibold">{t("brand")}</p>
+                <p className="text-sm text-ice/45">{t("app.assistantLabel")}</p>
               </div>
             </div>
             <button
-              aria-label="Создать диалог"
+              aria-label={t("app.newChatAria")}
               className="flex size-9 items-center justify-center rounded-lg border border-white/9 bg-white/[0.045] text-ice/65 transition duration-300 hover:border-mint/35 hover:text-ice"
               type="button"
             >
@@ -105,17 +108,17 @@ export function AssistantHome() {
           <div className="mt-8 rounded-xl border border-white/[0.07] bg-white/[0.035] p-4">
             <div className="mb-3 flex items-center gap-2 text-sm font-medium">
               <LockKeyhole className="text-mint" size={16} aria-hidden="true" />
-              Сессия активна
+              {t("app.activeSession")}
             </div>
             <p className="truncate text-sm text-ice">
               {profile?.display_name ?? profile?.email ?? user?.email}
             </p>
             <p className="mt-1 truncate text-xs text-ice/40">
               {profileQuery.isLoading
-                ? "Загружаем профиль"
+                ? t("app.profileLoading")
                 : profile
-                  ? "Профиль подключен"
-                  : "Профиль пока недоступен"}
+                  ? t("app.profileConnected")
+                  : t("app.profileUnavailable")}
             </p>
             <button
               className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 text-sm font-medium text-ice/72 transition duration-300 hover:border-red-300/30 hover:bg-red-500/10 hover:text-red-100"
@@ -123,24 +126,27 @@ export function AssistantHome() {
               type="button"
             >
               <LogOut size={16} aria-hidden="true" />
-              Выйти
+              {t("app.signOut")}
             </button>
           </div>
         </aside>
 
         <section className="flex min-h-screen flex-col">
-          <header className="sticky top-0 z-10 flex items-center justify-between border-b border-white/8 bg-night/84 px-5 py-4 backdrop-blur-xl">
+          <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-white/8 bg-night/84 px-5 py-4 backdrop-blur-xl">
             <div>
               <h1 className="text-xl font-semibold tracking-normal">
-                Ассистент для всего
+                {t("app.title")}
               </h1>
-              <p className="text-sm text-ice/45">
-                Внутреннее приложение после авторизации
-              </p>
+              <p className="text-sm text-ice/45">{t("app.subtitle")}</p>
             </div>
-            <div className="hidden items-center gap-2 rounded-lg border border-white/9 bg-white/[0.045] px-3 py-2 text-sm text-ice/62 md:flex">
-              <Command size={16} aria-hidden="true" />
-              {isConfigured ? "Supabase Auth" : "Env не настроены"}
+            <div className="flex items-center gap-2">
+              <div className="hidden items-center gap-2 rounded-lg border border-white/9 bg-white/[0.045] px-3 py-2 text-sm text-ice/62 md:flex">
+                <Command size={16} aria-hidden="true" />
+                {isConfigured
+                  ? t("app.supabaseAuth")
+                  : t("app.envNotConfigured")}
+              </div>
+              <LanguageSelect />
             </div>
           </header>
 
@@ -152,9 +158,9 @@ export function AssistantHome() {
                     <MessageSquareText size={18} aria-hidden="true" />
                   </div>
                   <div>
-                    <h2 className="font-semibold">Новый диалог</h2>
+                    <h2 className="font-semibold">{t("app.newDialog")}</h2>
                     <p className="text-sm text-ice/45">
-                      Каркас под будущие агенты и инструменты
+                      {t("app.dialogSubtitle")}
                     </p>
                   </div>
                 </div>
@@ -166,13 +172,10 @@ export function AssistantHome() {
                     <Brain size={28} aria-hidden="true" />
                   </div>
                   <p className="text-3xl font-semibold tracking-normal text-balance md:text-4xl">
-                    Следующий шаг: подключить историю диалогов, профили и
-                    серверные инструменты.
+                    {t("app.nextStep")}
                   </p>
                   <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-ice/56">
-                    Секреты моделей остаются вне браузера. Клиент держит сессию
-                    и UI, а выполнение действий уйдет в Edge Functions или
-                    отдельный API.
+                    {t("app.securityNote")}
                   </p>
                 </div>
               </div>
@@ -180,7 +183,7 @@ export function AssistantHome() {
               <form className="flex gap-3 border-t border-white/8 p-3 sm:p-4">
                 <input
                   className="min-w-0 flex-1 rounded-xl border border-white/10 bg-white/[0.045] px-4 py-3 text-ice outline-none transition duration-300 placeholder:text-ice/30 focus:border-mint/50 focus:bg-white/[0.065]"
-                  placeholder="Спроси что-нибудь..."
+                  placeholder={t("app.promptPlaceholder")}
                   type="text"
                 />
                 <button
@@ -188,42 +191,42 @@ export function AssistantHome() {
                   type="button"
                 >
                   <Send size={18} aria-hidden="true" />
-                  <span className="hidden sm:inline">Отправить</span>
+                  <span className="hidden sm:inline">{t("app.send")}</span>
                 </button>
               </form>
             </section>
 
             <aside className="grid content-start gap-5">
               <section className="rounded-2xl border border-white/9 bg-graphite/72 p-5 shadow-elevated">
-                <h2 className="font-semibold">Выбранный auth</h2>
+                <h2 className="font-semibold">{t("app.selectedAuth")}</h2>
                 <dl className="mt-4 grid gap-3 text-sm">
                   <div className="flex justify-between gap-4">
-                    <dt className="text-ice/45">Провайдер</dt>
+                    <dt className="text-ice/45">{t("app.provider")}</dt>
                     <dd className="font-medium">Supabase Auth</dd>
                   </div>
                   <div className="flex justify-between gap-4">
-                    <dt className="text-ice/45">Защита данных</dt>
+                    <dt className="text-ice/45">{t("app.dataProtection")}</dt>
                     <dd className="font-medium">Postgres RLS</dd>
                   </div>
                   <div className="flex justify-between gap-4">
                     <dt className="text-ice/45">MFA</dt>
-                    <dd className="font-medium">TOTP позже</dd>
+                    <dd className="font-medium">TOTP</dd>
                   </div>
                   <div className="flex justify-between gap-4">
-                    <dt className="text-ice/45">Flow</dt>
+                    <dt className="text-ice/45">{t("app.flow")}</dt>
                     <dd className="font-medium">Email + password</dd>
                   </div>
                   <div className="flex justify-between gap-4">
-                    <dt className="text-ice/45">Профиль</dt>
+                    <dt className="text-ice/45">{t("app.profile")}</dt>
                     <dd className="font-medium">
-                      {profile ? "public.profiles" : "ожидает сессию"}
+                      {profile ? "public.profiles" : t("app.profilePending")}
                     </dd>
                   </div>
                 </dl>
               </section>
 
               <section className="rounded-2xl border border-white/9 bg-graphite/72 p-5 shadow-elevated">
-                <h2 className="font-semibold">Ближайшие модули</h2>
+                <h2 className="font-semibold">{t("app.nextModules")}</h2>
                 <ul className="mt-4 grid gap-3">
                   {capabilities.map((item) => (
                     <li

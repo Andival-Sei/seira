@@ -7,6 +7,7 @@
 - [Архитектура](./architecture.md)
 - [Авторизация](./auth.md)
 - [Дизайн-система](./design-system.md)
+- [Мультиязычность](./i18n.md)
 - [Структура проекта](./project-structure.md)
 - [Supabase](./supabase.md)
 - [Роадмап](./roadmap.md)
