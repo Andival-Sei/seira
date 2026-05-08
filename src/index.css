@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --font-mono:
+    "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --color-night: #08090d;
+  --color-graphite: #11141a;
+  --color-graphite-soft: #171b23;
+  --color-ice: #eef3f2;
+  --color-mint: #63d6ce;
+  --color-violet: #9a7bff;
+  --color-ink-950: #eef3f2;
+  --color-ink-700: #b6c0bf;
+  --color-ink-500: #798686;
+  --color-paper: #08090d;
+  --color-panel: #11141a;
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-accent: #63d6ce;
+  --color-accent-strong: #9fe8e3;
+  --color-warn: #f0a85f;
+  --shadow-panel: 0 18px 64px rgb(0 0 0 / 0.34);
+  --shadow-elevated: 0 28px 90px rgb(0 0 0 / 0.44);
+  --shadow-soft: 0 10px 34px rgb(0 0 0 / 0.22);
+}
+
+:root {
+  color: var(--color-ice);
+  background: var(--color-night);
+  color-scheme: dark;
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 38%),
+    var(--color-night);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+::selection {
+  color: var(--color-night);
+  background: var(--color-mint);
+}
+
+.auth-grid {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    var(--color-night);
+  background-size:
+    42px 42px,
+    42px 42px,
+    auto;
+}
