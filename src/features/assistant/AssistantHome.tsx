@@ -14,6 +14,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useAuth } from "@/features/auth/use-auth";
+import { useProfile } from "@/features/profile/use-profile";
 
 const capabilities = [
   "Память и рабочие пространства",
@@ -32,6 +33,8 @@ const navItems = [
 export function AssistantHome() {
   const navigate = useNavigate();
   const { isConfigured, isLoading, session, signOut, user } = useAuth();
+  const profileQuery = useProfile(user?.id);
+  const profile = profileQuery.data;
 
   useEffect(() => {
     if (!isLoading && !session) {
@@ -104,7 +107,16 @@ export function AssistantHome() {
               <LockKeyhole className="text-mint" size={16} aria-hidden="true" />
               Сессия активна
             </div>
-            <p className="truncate text-sm text-ice/52">{user?.email}</p>
+            <p className="truncate text-sm text-ice">
+              {profile?.display_name ?? profile?.email ?? user?.email}
+            </p>
+            <p className="mt-1 truncate text-xs text-ice/40">
+              {profileQuery.isLoading
+                ? "Загружаем профиль"
+                : profile
+                  ? "Профиль подключен"
+                  : "Профиль пока недоступен"}
+            </p>
             <button
               className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 text-sm font-medium text-ice/72 transition duration-300 hover:border-red-300/30 hover:bg-red-500/10 hover:text-red-100"
               onClick={handleSignOut}
@@ -200,6 +212,12 @@ export function AssistantHome() {
                   <div className="flex justify-between gap-4">
                     <dt className="text-ice/45">Flow</dt>
                     <dd className="font-medium">Email + password</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-ice/45">Профиль</dt>
+                    <dd className="font-medium">
+                      {profile ? "public.profiles" : "ожидает сессию"}
+                    </dd>
                   </div>
                 </dl>
               </section>

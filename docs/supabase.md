@@ -25,6 +25,17 @@ supabase link --project-ref sxyvsgzqmvwyrhcbthlq
 supabase gen types --linked --schema public > src/lib/database.types.ts
 ```
 
-## Текущее состояние
+## Профили пользователей
 
-Remote schema `public` пока пустая. Следующий шаг - миграции для профилей, workspaces, диалогов и RLS.
+Миграция `20260508215923_create_profiles.sql` создает:
+
+- `public.profiles` с `id`, `email`, `display_name`, `avatar_url`, `locale`, `timezone`, timestamps;
+- RLS политики: пользователь читает, создает и обновляет только свой профиль;
+- trigger `auth.on_auth_user_created`, который автоматически создает профиль при регистрации;
+- приватные trigger-функции в схеме `private`, чтобы не держать `security definer` функции в exposed `public`.
+
+После регистрации пользователь получает запись в `public.profiles` и может заходить в приложение с этой же Supabase-сессией.
+
+## Следующий шаг
+
+Следующие миграции: workspaces, memberships, conversations, messages и RLS для совместной работы.
