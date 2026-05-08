@@ -8,6 +8,7 @@
 - [Авторизация](./auth.md)
 - [Дизайн-система](./design-system.md)
 - [Структура проекта](./project-structure.md)
+- [Supabase](./supabase.md)
 - [Роадмап](./roadmap.md)
 
 ## Правило качества

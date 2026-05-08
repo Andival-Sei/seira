@@ -27,6 +27,13 @@
 - Production redirect URL после появления домена.
 - RLS для всех пользовательских таблиц.
 
+Локальный клиент использует `.env.local`:
+
+```env
+VITE_SUPABASE_URL=https://sxyvsgzqmvwyrhcbthlq.supabase.co
+VITE_SUPABASE_ANON_KEY=<publishable key>
+```
+
 ## Следующие auth-этапы
 
 1. OAuth: Google и GitHub.
