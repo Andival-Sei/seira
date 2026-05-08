@@ -21,9 +21,7 @@ describe("AuthPage", () => {
       </AuthProvider>,
     );
 
-    expect(
-      screen.getByRole("heading", { name: "Войти в Seira" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Seira" })).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Регистрация" }),
     ).toBeInTheDocument();
